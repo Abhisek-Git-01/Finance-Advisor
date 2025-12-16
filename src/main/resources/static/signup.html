@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | Finance Advisor</title>
+
+    <style>
+        :root {
+            --bg-main: #050816;
+            --bg-card: rgba(12, 17, 32, 0.96);
+            --accent: #22d3ee;       /* cyan */
+            --accent-soft: #1d4ed8;  /* blue */
+            --accent-warn: #f97373;  /* red for error */
+            --text-main: #e5e7eb;
+            --text-muted: #9ca3af;
+            --border-subtle: #1f2937;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: radial-gradient(circle at top, #020617 0%, #020617 40%, #000 100%);
+            min-height: 100vh;
+            overflow: hidden;
+            color: var(--text-main);
+        }
+
+        /* Background glow / blobs */
+        .bg-glow {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .blob {
+            position: absolute;
+            width: 380px;
+            height: 380px;
+            border-radius: 999px;
+            filter: blur(65px);
+            opacity: 0.6;
+            mix-blend-mode: screen;
+        }
+        .blob-1 {
+            background: #0ea5e9;
+            top: -120px;
+            left: -80px;
+        }
+        .blob-2 {
+            background: #4f46e5;
+            bottom: -150px;
+            right: -60px;
+        }
+        .blob-3 {
+            background: #22c55e;
+            top: 50%;
+            left: 70%;
+        }
+
+        .page-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .signup-box {
+            width: 100%;
+            max-width: 440px;
+            padding: 30px 32px 26px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(17, 24, 39, 0.98), rgba(15, 23, 42, 0.97));
+            box-shadow:
+                0 0 0 1px rgba(56, 189, 248, 0.25),
+                0 25px 70px rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(18px);
+        }
+
+        .brand-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        .brand-logo {
+            width: 34px;
+            height: 34px;
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 30% 0%, #22d3ee, #1d4ed8);
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.75);
+            font-size: 18px;
+            color: #e5e7eb;
+        }
+
+        .brand-text-main {
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            font-size: 18px;
+        }
+
+        .brand-text-sub {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--accent);
+            letter-spacing: 0.16em;
+        }
+
+        .signup-box h2 {
+            margin: 12px 0 4px;
+            font-size: 24px;
+            font-weight: 600;
+            color: #f9fafb;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 22px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 18px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 12px 12px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border-subtle);
+            background: rgba(15, 23, 42, 0.9);
+            color: var(--text-main);
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s ease;
+        }
+
+        .input-group input::placeholder {
+            color: transparent;
+        }
+
+        .input-group input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.6);
+            background: rgba(15, 23, 42, 0.98);
+        }
+
+        .input-group label {
+            position: absolute;
+            top: 11px;
+            left: 12px;
+            padding: 0 4px;
+            border-radius: 999px;
+            font-size: 13px;
+            color: var(--text-muted);
+            pointer-events: none;
+            background: transparent;
+            transition: 0.2s ease;
+        }
+
+        .input-group input:focus + label,
+        .input-group input:not(:placeholder-shown) + label {
+            top: -8px;
+            font-size: 11px;
+            color: var(--accent);
+            background: #0f172a;
+        }
+
+        .field-row {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 10px;
+        }
+
+        #errorMsg {
+            min-height: 18px;
+            font-size: 12px;
+            color: var(--accent-warn);
+            margin-top: 2px;
+            margin-bottom: 4px;
+            text-align: center;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 11px;
+            margin-top: 10px;
+            border-radius: 999px;
+            border: none;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            background: linear-gradient(135deg, #0ea5e9, #22c55e);
+            color: white;
+            letter-spacing: 0.03em;
+            box-shadow:
+                0 10px 25px rgba(14, 165, 233, 0.55),
+                0 0 0 1px rgba(8, 47, 73, 0.9);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px) scale(1.01);
+            filter: brightness(1.05);
+            box-shadow:
+                0 14px 35px rgba(14, 165, 233, 0.7),
+                0 0 0 1px rgba(8, 47, 73, 1);
+        }
+
+        .btn:active {
+            transform: translateY(0) scale(0.995);
+            box-shadow:
+                0 8px 18px rgba(15, 23, 42, 0.9),
+                0 0 0 1px rgba(15, 23, 42, 1);
+        }
+
+        .links {
+            margin-top: 14px;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .links a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 400;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        .password-hint {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: -4px;
+            margin-bottom: 6px;
+        }
+
+        @media (max-width: 480px) {
+            .signup-box {
+                padding: 24px 18px 20px;
+                border-radius: 16px;
+            }
+            .field-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg-glow">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+</div>
+
+<div class="page-wrapper">
+    <div class="signup-box">
+        <div class="brand-row">
+            <div class="brand-logo">₹</div>
+            <div>
+                <div class="brand-text-main">Finance Advisor</div>
+                <div class="brand-text-sub">Smart Money. Simple UI.</div>
+            </div>
+        </div>
+
+        <h2>Create your account</h2>
+        <div class="subtitle">
+            Set up your profile to start tracking expenses, savings and goals in one place.
+        </div>
+
+        <!-- SINGLE FORM -->
+        <form action="/add" method="post" id="signupForm" onsubmit="return validatePasswords()">
+
+            <div class="input-group">
+                <input type="text" id="name" placeholder=" " required name="name">
+                <label>Name</label>
+            </div>
+
+            <div class="field-row">
+                <div class="input-group">
+                    <!-- Mobile: 10-digit Indian number -->
+                    <input type="tel"
+                           id="mobile"
+                           placeholder=" "
+                           required
+                           name="mobNo"
+                           maxlength="10"
+                           inputmode="numeric">
+                    <label>Mobile Number</label>
+                </div>
+
+                <div class="input-group">
+                    <input type="email" id="email" placeholder=" " required name="email">
+                    <label>Email</label>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <input type="password" id="password" placeholder=" " required name="password">
+                <label>Password</label>
+            </div>
+
+            <p class="password-hint">
+                Use at least 8 characters with a mix of letters and numbers.
+            </p>
+
+            <div class="input-group">
+                <input type="password" id="cpassword" placeholder=" " required name="confirmPassword">
+                <label>Confirm Password</label>
+            </div>
+
+            <p id="errorMsg"></p>
+
+            <button type="submit" id="createBtn" class="btn">Create account</button>
+
+            <div class="links">
+                Already have an account?
+                <a href="login.html">Log in</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function validatePasswords() {
+        const name = document.getElementById("name").value.trim();
+        const mobile = document.getElementById("mobile").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const p1 = document.getElementById("password").value;
+        const p2 = document.getElementById("cpassword").value;
+        const errorMsg = document.getElementById("errorMsg");
+
+        // Clear previous message
+        errorMsg.textContent = "";
+
+        // Name: at least 3 characters
+        if (name.length < 3) {
+            errorMsg.textContent = "Please enter a valid name (minimum 3 characters).";
+            return false;
+        }
+
+        // Mobile: 10 digits, starting 6–9 (typical Indian mobile)
+        const mobileRegex = /^[6-9]\d{9}$/;
+        if (!mobileRegex.test(mobile)) {
+            errorMsg.textContent = "Enter a valid 10-digit mobile number starting with 6–9.";
+            return false;
+        }
+
+        // Email basic validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            errorMsg.textContent = "Please enter a valid email address.";
+            return false;
+        }
+
+        // Password length
+        if (p1.length < 8) {
+            errorMsg.textContent = "Password must be at least 8 characters long.";
+            return false;
+        }
+
+        // Password match
+        if (p1 !== p2) {
+            errorMsg.textContent = "Passwords do not match. Please re-enter.";
+            return false;
+        }
+
+        // All good
+        return true;
+    }
+</script>
+
+</body>
+</html>

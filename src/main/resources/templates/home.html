@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Advisor - Home</title>
+
+    <style>
+        :root {
+            --bg-main: #020617;
+            --bg-section: #020816;
+            --bg-card: #02091b;
+            --border-soft: #1e293b;
+            --accent: #3b82f6;
+            --accent-soft: rgba(59, 130, 246, 0.15);
+            --accent-2: #22c55e;
+            --text-main: #e5e7eb;
+            --text-muted: #94a3b8;
+            --radius-lg: 18px;
+            --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.7);
+            --max-width: 1120px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Poppins", sans-serif;
+            background: radial-gradient(circle at top left, #0f172a, #020617 55%);
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        /* Decorative glows */
+        .glow {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.42;
+            z-index: -1;
+        }
+
+        .glow.glow-1 {
+            width: 420px;
+            height: 420px;
+            background: #3b82f6;
+            top: -120px;
+            left: -80px;
+        }
+
+        .glow.glow-2 {
+            width: 480px;
+            height: 480px;
+            background: #22c55e;
+            bottom: -140px;
+            right: -80px;
+        }
+
+        /* Layout helpers */
+        .page {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* HEADER / NAVBAR */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            backdrop-filter: blur(14px);
+            background: linear-gradient(to bottom, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.75));
+            border-bottom: 1px solid rgba(15, 23, 42, 0.8);
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 0;
+        }
+
+        .logo-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-badge {
+            width: 34px;
+            height: 34px;
+            border-radius: 12px;
+            background: radial-gradient(circle at 20% 20%, #38bdf8, #6366f1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .logo-text span:first-child {
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+        }
+
+        .logo-text span:last-child {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .nav-link {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -4px;
+            width: 0;
+            height: 2px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            transition: width 0.2s ease-out;
+        }
+
+        .nav-link:hover {
+            color: var(--text-main);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .pill-badge {
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: rgba(34, 197, 94, 0.15);
+            color: #bbf7d0;
+            border: 1px solid rgba(34, 197, 94, 0.35);
+        }
+
+        .login-btn {
+            padding: 9px 20px;
+            background: transparent;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            color: var(--text-main);
+            font-weight: 500;
+            font-size: 13px;
+            margin-right: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease-out;
+        }
+
+        .login-btn:hover {
+            border-color: var(--accent);
+            color: #bfdbfe;
+            box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.4);
+        }
+
+        .primary-cta {
+            padding: 9px 22px;
+            border-radius: 999px;
+            border: none;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            color: #f9fafb;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            box-shadow: 0 12px 30px rgba(34, 197, 94, 0.3);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.12s ease;
+        }
+
+        .primary-cta:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 16px 35px rgba(34, 197, 94, 0.4);
+            opacity: 0.97;
+        }
+
+        /* HERO */
+        .hero {
+            padding: 40px 0 70px;
+        }
+
+        .hero-inner {
+            display: grid;
+            grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+            gap: 36px;
+            align-items: center;
+        }
+
+        @media (max-width: 900px) {
+            .hero-inner {
+                grid-template-columns: minmax(0, 1fr);
+                padding-top: 25px;
+            }
+        }
+
+        .hero-eyebrow {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .hero-title {
+            font-size: clamp(2.2rem, 3vw, 3rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 14px;
+        }
+
+        .hero-title span {
+            background: linear-gradient(120deg, #38bdf8, #22c55e);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 15px;
+            color: var(--text-muted);
+            max-width: 460px;
+            margin-bottom: 20px;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .hero-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .hero-meta span {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .hero-meta-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+            background: #22c55e;
+        }
+
+        .hero-panel {
+            background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.25), transparent 55%);
+            border-radius: 26px;
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            padding: 16px 18px 18px;
+            box-shadow: var(--shadow-soft);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-tagline {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .hero-big {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .hero-strip {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .hero-chip {
+            font-size: 11px;
+            padding: 5px 9px;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.92);
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            color: var(--text-muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .hero-mini-chart {
+            margin-top: 10px;
+            border-radius: 16px;
+            border: 1px dashed rgba(148, 163, 184, 0.55);
+            padding: 9px 12px;
+            background: rgba(15, 23, 42, 0.95);
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .hero-mini-chart strong {
+            font-size: 13px;
+        }
+
+        .hero-pill {
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: rgba(22, 163, 74, 0.18);
+            color: #bbf7d0;
+        }
+
+        .hero-gradient-bar {
+            position: absolute;
+            inset: auto 20px 14px;
+            height: 5px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.2), rgba(34, 197, 94, 0.9));
+            opacity: 0.9;
+        }
+
+        /* LIVE BANNER */
+        .live-wrapper {
+            margin: 14px auto 0;
+            max-width: var(--max-width);
+            padding: 0 20px;
+        }
+
+        .live-banner {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #020617, #020c1f);
+            border: 1px solid rgba(37, 99, 235, 0.4);
+            height: 60px;
+        }
+
+        .live-track {
+            position: absolute;
+            white-space: nowrap;
+            display: inline-block;
+            animation: marquee 20s linear infinite;
+            font-size: 13px;
+            color: var(--text-muted);
+            padding-left: 10%;
+        }
+
+        .live-track span {
+            margin-right: 40px;
+        }
+
+        .live-label {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: rgba(220, 38, 38, 0.14);
+            color: #fecaca;
+            border: 1px solid rgba(220, 38, 38, 0.5);
+        }
+
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        /* FEATURES / ADS */
+        .section {
+            padding: 70px 0 40px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .section-kicker {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .section-subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 22px;
+        }
+
+        .card {
+            background: rgba(15, 23, 42, 0.96);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-soft);
+            padding: 16px 16px 18px;
+            box-shadow: var(--shadow-soft);
+            transition: transform 0.18s ease-out, box-shadow 0.18s ease-out, border-color 0.18s ease-out, background 0.18s ease-out;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(59, 130, 246, 0.75);
+            box-shadow: 0 22px 55px rgba(15, 23, 42, 0.9);
+            background: #020617;
+        }
+
+        .card-image {
+            border-radius: 14px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .card-title span.icon {
+            font-size: 18px;
+        }
+
+        .card-text {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* TESTIMONIALS */
+        .feedback-section {
+            padding-bottom: 60px;
+        }
+
+        .feedback-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 22px;
+        }
+
+        .feedback-card {
+            background: rgba(15, 23, 42, 0.98);
+            border-radius: 18px;
+            border: 1px solid var(--border-soft);
+            padding: 18px 18px 16px;
+            box-shadow: var(--shadow-soft);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feedback-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.24), transparent 55%);
+            opacity: 0;
+            transition: opacity 0.2s ease-out;
+        }
+
+        .feedback-card:hover::before {
+            opacity: 1;
+        }
+
+        .feedback-inner {
+            position: relative;
+        }
+
+        .feedback-user {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .feedback-user img {
+            width: 50px;
+            height: 50px;
+            border-radius: 999px;
+            object-fit: cover;
+            margin-right: 10px;
+            border: 2px solid rgba(59, 130, 246, 0.6);
+        }
+
+        .feedback-user h4 {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .feedback-user p {
+            margin: 0;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .feedback-text {
+            font-size: 14px;
+            color: var(--text-main);
+            margin-top: 8px;
+        }
+
+        .feedback-badge {
+            position: absolute;
+            right: 0;
+            top: 4px;
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: rgba(250, 204, 21, 0.15);
+            color: #facc15;
+        }
+
+        /* FOOTER */
+        footer {
+            background: #020617;
+            border-top: 1px solid rgba(15, 23, 42, 0.9);
+            padding: 30px 0 22px;
+            margin-top: auto;
+        }
+
+        .footer-top {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .footer-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .footer-subtitle {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 18px;
+        }
+
+        .social-icon img {
+            width: 32px;
+            height: 32px;
+            filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.6));
+            transition: transform 0.18s ease, filter 0.18s ease;
+        }
+
+        .social-icon img:hover {
+            transform: translateY(-2px) scale(1.05);
+            filter: drop-shadow(0 0 15px rgba(129, 199, 255, 0.8));
+        }
+
+        .footer-bottom {
+            font-size: 12px;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(15, 23, 42, 0.9);
+            padding-top: 10px;
+            text-align: center;
+        }
+
+        /* SMALL SCREEN */
+        @media (max-width: 720px) {
+            .nav-links {
+                display: none;
+            }
+            .hero {
+                padding-top: 26px;
+            }
+            .hero-panel {
+                order: -1;
+            }
+            .section {
+                padding-top: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="glow glow-1"></div>
+<div class="glow glow-2"></div>
+
+<div class="page">
+    <!-- HEADER -->
+    <header>
+        <div class="container">
+            <nav class="nav">
+                <div class="logo-wrap">
+                    <div class="logo-badge">FA</div>
+                    <div class="logo-text">
+                        <span>Finance Advisor</span>
+                        <span>Your smart money coach</span>
+                    </div>
+                </div>
+
+                <div class="nav-links">
+                    <a href="overview.html" class="nav-link">Overview</a>
+                    <a href="features.html" class="nav-link">Features</a>
+                    <a href="testimonials.html" class="nav-link">Testimonials</a>
+                    <span class="pill-badge">Early Access</span>
+
+                    <button class="login-btn" onclick="goToLogin()">Log In</button>
+                    <button class="primary-cta" onclick="goToSignUp()">Start Tracking Free</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <main>
+        <section class="hero">
+            <div class="container hero-inner">
+                <div>
+                    <div class="hero-eyebrow">Personal finance, simplified</div>
+                    <h1 class="hero-title">
+                        Manage your <span>money</span> with clarity and confidence.
+                    </h1>
+                    <p class="hero-subtitle">
+                        Track your income and expenses in one place, understand your spending behaviour, and receive
+                        personalised suggestions to grow your savings.
+                    </p>
+
+                    <div class="hero-actions">
+                        <button class="primary-cta" onclick="goToSignUp()">Get Started – It’s Free</button>
+                        <button class="login-btn" onclick="goToLogin()">I already have an account</button>
+                    </div>
+
+                    <div class="hero-meta">
+                        <span><span class="hero-meta-dot"></span> No credit card required</span>
+                        <span>🔐 Encrypted & secure</span>
+                        <span>⭐ Trusted by working professionals & students</span>
+                    </div>
+                </div>
+
+                <aside class="hero-panel">
+                    <p class="hero-tagline">Live snapshot</p>
+                    <p class="hero-big">This month you’re on track to save <span style="color:var(--accent-2);">₹12,450</span>.</p>
+                    <p class="hero-tagline">Based on your current income & expense trend.</p>
+
+                    <div class="hero-strip">
+                        <div class="hero-chip">Income: ₹55,000</div>
+                        <div class="hero-chip">Expenses: ₹42,550</div>
+                        <div class="hero-chip">Savings rate: 22.6%</div>
+                    </div>
+
+                    <div class="hero-mini-chart">
+                        <div>
+                            <div style="font-size:11px;color:var(--text-muted);">AI insight</div>
+                            <strong>“You can increase savings by 5–8% by trimming food delivery & shopping.”</strong>
+                        </div>
+                        <span class="hero-pill">Smart Suggestion</span>
+                    </div>
+
+                    <div class="hero-gradient-bar"></div>
+                </aside>
+            </div>
+        </section>
+
+        <!-- LIVE BANNER -->
+        <section class="live-wrapper">
+            <div class="live-banner">
+                <div class="live-label">Live feed</div>
+                <div class="live-track">
+                    <span>Rohan just reduced his monthly expenses by 14% 🎉</span>
+                    <span>Neha reached her emergency fund goal 2 months early 💰</span>
+                    <span>Arun unlocked a premium insight on long-term savings 📈</span>
+                    <span>Smart finance tips updating every 24 hours ⚡</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- FEATURES -->
+        <section class="section">
+            <div class="container">
+                <div class="section-header">
+                    <div class="section-kicker">Why Finance Advisor</div>
+                    <h2 class="section-title">Everything you need to understand your money.</h2>
+                    <p class="section-subtitle">
+                        A clean, focused dashboard to see where your money goes, what you can improve,
+                        and how close you are to your goals.
+                    </p>
+                </div>
+
+                <div class="cards-grid">
+                    <article class="card">
+                        <div class="card-image">
+                            <img src="images/smart-suggestion.png" alt="Smart suggestions">
+                        </div>
+                        <h3 class="card-title">
+                            <span class="icon">💡</span>Smart Suggestions
+                        </h3>
+                        <p class="card-text">
+                            Get actionable tips based on your spending pattern – from “cut food delivery by 10%” to “set
+                            aside money for an emergency fund”.
+                        </p>
+                    </article>
+
+                    <article class="card">
+                        <div class="card-image">
+                            <img src="images/monthly-summery.avif" alt="Monthly summary">
+                        </div>
+                        <h3 class="card-title">
+                            <span class="icon">📊</span>Monthly Summary
+                        </h3>
+                        <p class="card-text">
+                            Beautiful visual reports that show income vs expense, top spending categories, and your
+                            monthly savings score at a glance.
+                        </p>
+                    </article>
+
+                    <article class="card">
+                        <div class="card-image">
+                            <img src="https://images.unsplash.com/photo-1556742393-d75f468bfcb0?auto=format&fit=crop&w=800&q=60"
+                                 alt="Secure data">
+                        </div>
+                        <h3 class="card-title">
+                            <span class="icon">🔐</span>Secure by design
+                        </h3>
+                        <p class="card-text">
+                            Your financial data is encrypted and handled with care, so you can focus on making better
+                            decisions, not worrying about privacy.
+                        </p>
+                    </article>
+
+                    <article class="card">
+                        <div class="card-image">
+                            <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=60"
+                                 alt="Mobile friendly">
+                        </div>
+                        <h3 class="card-title">
+                            <span class="icon">📱</span>Works everywhere
+                        </h3>
+                        <p class="card-text">
+                            A responsive, mobile-friendly experience that works smoothly on phones, tablets, and
+                            desktops – no app install needed.
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- TESTIMONIALS -->
+        <section class="section feedback-section">
+            <div class="container">
+                <div class="section-header">
+                    <div class="section-kicker">Real stories</div>
+                    <h2 class="section-title">What our users are saying.</h2>
+                    <p class="section-subtitle">
+                        Students, professionals, and families across India use Finance Advisor to stay on top of their
+                        money.
+                    </p>
+                </div>
+
+                <div class="feedback-grid">
+                    <article class="feedback-card">
+                        <div class="feedback-inner">
+                            <div class="feedback-badge">Saved ₹8,000</div>
+                            <div class="feedback-user">
+                                <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Rohit Sharma">
+                                <div>
+                                    <h4>Rohit Sharma</h4>
+                                    <p>Software Engineer</p>
+                                </div>
+                            </div>
+                            <p class="feedback-text">
+                                “This app helped me save almost ₹8,000 in 2 months. The suggestions actually make sense
+                                and are easy to follow.”
+                            </p>
+                        </div>
+                    </article>
+
+                    <article class="feedback-card">
+                        <div class="feedback-inner">
+                            <div class="feedback-badge">Clarity & control</div>
+                            <div class="feedback-user">
+                                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Neha Verma">
+                                <div>
+                                    <h4>Neha Verma</h4>
+                                    <p>College Student</p>
+                                </div>
+                            </div>
+                            <p class="feedback-text">
+                                “The monthly report is super clean and easy to understand. It’s the first time I feel I
+                                actually understand where my pocket money goes.”
+                            </p>
+                        </div>
+                    </article>
+
+                    <article class="feedback-card">
+                        <div class="feedback-inner">
+                            <div class="feedback-badge">Banker approved</div>
+                            <div class="feedback-user">
+                                <img src="https://randomuser.me/api/portraits/men/12.jpg" alt="Arun Prakash">
+                                <div>
+                                    <h4>Arun Prakash</h4>
+                                    <p>Bank Manager</p>
+                                </div>
+                            </div>
+                            <p class="feedback-text">
+                                “Best financial tracking tool I’ve used so far. Simple, modern UI and the graphs make it
+                                easy to explain money habits to my clients as well.”
+                            </p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="footer-top">
+                <div>
+                    <h3 class="footer-title">Stay in control of your money.</h3>
+                    <p class="footer-subtitle">
+                        Join Finance Advisor and start tracking your finances in under 2 minutes.
+                    </p>
+                </div>
+                <div class="social-icons">
+                    <a href="#" class="social-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" alt="LinkedIn">
+                    </a>
+                    <a href="#" class="social-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="Twitter">
+                    </a>
+                    <a href="#" class="social-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/1384/1384014.png" alt="YouTube">
+                    </a>
+                    <a href="#" class="social-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/174/174883.png" alt="Instagram">
+                    </a>
+                    <a href="#" class="social-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook">
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                © 2025 Finance Advisor. All rights reserved.
+            </div>
+        </div>
+    </footer>
+</div>
+
+<script>
+    function goToLogin() {
+        // Change this to your Spring Boot login mapping if needed (e.g. "/login")
+        window.location.href = "login.html";
+    }
+        function goToSignUp() {
+        // Change this to your Spring Boot login mapping if needed (e.g. "/login")
+        window.location.href = "signup.html";
+    }
+</script>
+</body>
+</html>

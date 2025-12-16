@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Verify OTP | Finance Advisor</title>
+
+    <style>
+        /* ====== RESET ====== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at top, #1f2937 0, #020617 45%, #000 100%);
+            color: #f9fafb;
+            overflow: hidden;
+        }
+
+        /* ====== BACKGROUND ANIMATION ====== */
+        .floating-orb {
+            position: fixed;
+            border-radius: 999px;
+            filter: blur(40px);
+            opacity: 0.4;
+            animation: float 16s ease-in-out infinite alternate;
+            z-index: -1;
+        }
+
+        .floating-orb.orb-1 {
+            width: 260px;
+            height: 260px;
+            top: -60px;
+            left: -60px;
+            background: #22d3ee;
+        }
+
+        .floating-orb.orb-2 {
+            width: 320px;
+            height: 320px;
+            bottom: -80px;
+            right: -40px;
+            background: #6366f1;
+            animation-delay: 4s;
+        }
+
+        .floating-orb.orb-3 {
+            width: 200px;
+            height: 200px;
+            bottom: 20%;
+            left: 10%;
+            background: #f97316;
+            animation-delay: 8s;
+        }
+
+        @keyframes float {
+            0%   { transform: translate3d(0, 0, 0) scale(1); }
+            50%  { transform: translate3d(20px, -20px, 0) scale(1.05); }
+            100% { transform: translate3d(-20px, 20px, 0) scale(1.1); }
+        }
+
+        /* ====== CARD ====== */
+        .otp-card {
+            width: 100%;
+            max-width: 420px;
+            background: rgba(15, 23, 42, 0.92);
+            border-radius: 24px;
+            padding: 32px 28px 28px;
+            box-shadow:
+                0 18px 45px rgba(15, 23, 42, 0.85),
+                0 0 0 1px rgba(148, 163, 184, 0.12);
+            position: relative;
+            overflow: hidden;
+            animation: cardIn 0.7s ease-out forwards;
+            transform: translateY(20px);
+            opacity: 0;
+        }
+
+        .otp-card::before {
+            content: "";
+            position: absolute;
+            inset: -2px;
+            border-radius: inherit;
+            border: 1px solid transparent;
+            background: linear-gradient(135deg,
+                rgba(56, 189, 248, 0.3),
+                rgba(129, 140, 248, 0.3),
+                rgba(249, 115, 22, 0.25)
+            ) border-box;
+            mask:
+                linear-gradient(#000 0 0) padding-box,
+                linear-gradient(#000 0 0);
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0.85;
+        }
+
+        @keyframes cardIn {
+            from {
+                transform: translateY(24px) scale(0.98);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .otp-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .otp-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            margin-bottom: 6px;
+        }
+
+        .otp-subtitle {
+            font-size: 0.9rem;
+            color: #9ca3af;
+        }
+
+        .otp-subtitle span {
+            color: #e5e7eb;
+            font-weight: 500;
+        }
+
+        /* ====== FORM ====== */
+        form {
+            margin-top: 20px;
+        }
+
+        .otp-input-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.09em;
+            color: #9ca3af;
+            margin-bottom: 8px;
+        }
+
+        .otp-input-wrapper {
+            position: relative;
+            margin-bottom: 18px;
+        }
+
+        .otp-input {
+            width: 100%;
+            height: 54px;
+            border-radius: 16px;
+            border: 1px solid #1f2937;
+            background: rgba(15, 23, 42, 0.9);
+            color: #e5e7eb;
+            font-size: 1.1rem;
+            letter-spacing: 0.4em;
+            text-align: center;
+            padding: 0 16px;
+            outline: none;
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease,
+                background 0.2s ease,
+                transform 0.1s ease;
+        }
+
+        .otp-input:focus {
+            border-color: #38bdf8;
+            background: rgba(15, 23, 42, 0.95);
+            box-shadow: 0 0 0 1px #38bdf8, 0 20px 40px rgba(8, 47, 73, 0.8);
+            transform: translateY(-1px);
+        }
+
+        .otp-input::placeholder {
+            color: #4b5563;
+        }
+
+        .hint {
+            font-size: 0.8rem;
+            color: #6b7280;
+            margin-bottom: 16px;
+        }
+
+        .hint strong {
+            color: #e5e7eb;
+        }
+
+        .error-message {
+            font-size: 0.8rem;
+            color: #f97373;
+            margin-bottom: 10px;
+            display: none; /* show via backend if needed */
+        }
+
+        /* ====== BUTTON ====== */
+        .btn-submit {
+            width: 100%;
+            border: none;
+            border-radius: 999px;
+            padding: 12px 16px;
+            margin-top: 8px;
+            font-size: 0.98rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #38bdf8, #6366f1);
+            color: #0b1220;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 16px 35px rgba(37, 99, 235, 0.5);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .btn-submit::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top left,
+            rgba(255, 255, 255, 0.6),
+            transparent 60%);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .btn-submit:hover::before {
+            opacity: 1;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-1px) scale(1.01);
+            box-shadow: 0 22px 45px rgba(37, 99, 235, 0.65);
+        }
+
+        .btn-submit:active {
+            transform: translateY(1px) scale(0.99);
+            box-shadow: 0 12px 25px rgba(15, 23, 42, 0.9);
+        }
+
+        /* ====== FOOTER TEXT ====== */
+        .footer-text {
+            margin-top: 14px;
+            font-size: 0.78rem;
+            color: #6b7280;
+            text-align: center;
+        }
+
+        .footer-text button,
+        .footer-text a {
+            background: none;
+            border: none;
+            color: #38bdf8;
+            cursor: pointer;
+            font: inherit;
+            padding: 0;
+        }
+
+        .footer-text button:hover,
+        .footer-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* ====== RESPONSIVE ====== */
+        @media (max-width: 480px) {
+            .otp-card {
+                margin: 0 16px;
+                padding: 24px 20px 22px;
+            }
+
+            .otp-title {
+                font-size: 1.25rem;
+            }
+
+            .otp-input {
+                height: 50px;
+                font-size: 1rem;
+                letter-spacing: 0.35em;
+            }
+
+            .btn-submit {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="floating-orb orb-1"></div>
+<div class="floating-orb orb-2"></div>
+<div class="floating-orb orb-3"></div>
+
+<div class="otp-card">
+    <div class="otp-header">
+        <h1 class="otp-title">Verify OTP</h1>
+        <p class="otp-subtitle">
+            We’ve sent a 6-digit code to<br>
+            <span><!-- put email here from backend --></span>
+        </p>
+    </div>
+
+
+    <form action="/verify-otp" method="post">
+        <!-- Hidden email passed from previous step -->
+        <input type="hidden" name="email" value="${email}">
+
+        <!-- Optional: show error using server-side logic -->
+        <p class="error-message">
+            <!-- Example: Invalid or expired OTP -->
+        </p>
+
+        <label class="otp-input-label">One-Time Password</label>
+        <div class="otp-input-wrapper">
+            <input
+                    type="text"
+                    name="otp"
+                    maxlength="6"
+                    inputmode="numeric"
+                    pattern="[0-9]{6}"
+                    class="otp-input"
+                    placeholder="••••••"
+                    autocomplete="one-time-code"
+                    required
+            >
+        </div>
+
+        <p class="hint">
+            Enter the <strong>6-digit OTP</strong> from your email to complete verification.
+        </p>
+
+        <button type="submit" class="btn-submit">
+            Verify & Continue
+        </button>
+
+        <p class="footer-text">
+            Didn’t get the code?
+            <a href="#">Resend OTP</a>
+        </p>
+    </form>
+</div>
+
+</body>
+</html>
