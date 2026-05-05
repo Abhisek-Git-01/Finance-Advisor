@@ -125,7 +125,3 @@ Contributions are welcome! Feel free to fork and improve this project.
 This project is built as part of learning backend development and financial system design.
 
 ---
-![Java](https://img.shields.io/badge/Java-17-orange)
-![Spring Boot](https://img.shields.io/badge/SpringBoot-3-green)
-![MySQL](https://img.shields.io/badge/MySQL-Database-blue)
-![AWS](https://img.shields.io/badge/AWS-Cloud-orange)
